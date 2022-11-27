@@ -1,5 +1,5 @@
 # php-tya-openapi-commander
-One file to do send simple REST commands to Tyua-api and control your switches/lights
+One file to send simple REST commands to Tyua-api and control your switches/lights
 
 First, you have to make iot developer account https://iot.tuya.com/?_source=github and then do as this describes: https://developer.tuya.com/en/docs/iot/Platform_Configuration_smarthome?id=Kamcgamwoevrx
 And after that you will get needed access codes from there. You have to paste them in rightful places on first lines of source file (tuya.php).
