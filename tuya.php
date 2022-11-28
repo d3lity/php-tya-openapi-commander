@@ -69,7 +69,7 @@ if (file_exists("devices.txt") && !isset($_REQUEST['refresh'])){
 		echo "\n";
 	}
 	echo "\n<a href='?refresh=1'>Refresh list</a>\n\n";
-	print_r( $ar );
+	//print_r( $ar ); // for developement of other commands
 }else {
 	echo "Getting new device list.\n";
 	get_users_device_list();
@@ -185,7 +185,7 @@ function get_users_device_list(){
 	}else{
 		$res=preg_replace("/^[^§]+?\r\n\r\n/",'',$r);
 	}
-	$ar=json_decode($res);
+	$ar=json_decode($res,true);
 	if ($ar['code']==1010) {
 		get_token();
 		get_users_device_list();
