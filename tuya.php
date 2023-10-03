@@ -1,4 +1,5 @@
 <?php
+
 // These variables need to be filled in
 // Get them form https://eu.iot.tuya.com/cloud   (after registering, etc.)
 
@@ -28,6 +29,11 @@ $ACCESS_TOKEN  = "";
 if (isset($_REQUEST['control'])){
 	$fc=file_get_contents("token.txt");
 	$ar=json_decode( $fc, true );
+	if ($ar["success"]==false) {
+		unlink("token.txt");
+		echo '<meta http-equiv="refresh" content="0;URL=\'?\'" />';
+		die();
+	}
 	$ACCESS_TOKEN = $ar["result"]["access_token"];
 	$val=$_REQUEST['value'];
 	if ($val==='true') $val=true;
@@ -43,10 +49,16 @@ if (file_exists("token.txt")){
 	// echo "Using old token.\n";
 	$fc=file_get_contents("token.txt");
 	$ar=json_decode( $fc, true );
+	if ($ar["success"]==false) {
+		unlink("token.txt");
+		echo '<meta http-equiv="refresh" content="0;URL=\'?\'" />';
+		die();
+	}	
 	$ACCESS_TOKEN = $ar["result"]["access_token"];
 }else {
 	echo "Getting token.\n";
 	get_token();
+	echo '<meta http-equiv="refresh" content="0;URL=\'?\'" />';
 }
 
 if (file_exists("devices.txt") && !isset($_REQUEST['refresh'])){
@@ -58,7 +70,7 @@ if (file_exists("devices.txt") && !isset($_REQUEST['refresh'])){
 		echo "<img style='height:20px;' src='https://images.tuyaeu.com/".$d['icon']."' /> ";
 		if ($d['online']==1) echo "<b>";
 			echo $d['name'];
-			echo str_repeat(".",30-mb_strlen($d['name']));
+			echo str_repeat(".",max(0,30-mb_strlen($d['name'])));
 		if ($d['online']==1) echo "</b>";
 
 		foreach($d['status'] as $s){
@@ -70,9 +82,11 @@ if (file_exists("devices.txt") && !isset($_REQUEST['refresh'])){
 	}
 	echo "\n<a href='?refresh=1'>Refresh list</a>\n\n";
 	//print_r( $ar ); // for developement of other commands
-}else {
+}
+if (!file_exists("devices.txt") || isset($_REQUEST['refresh'])){
 	echo "Getting new device list.\n";
 	get_users_device_list();
+	echo '<meta http-equiv="refresh" content="0;URL=\'?\'" />';
 }
 
 function control($device_id,$control){
