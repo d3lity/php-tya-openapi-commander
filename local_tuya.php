@@ -217,7 +217,7 @@ if (@$_REQUEST['listen']){ // sse of ip's of devices
 	socket_close($sock);
 	if ($ips_updated>0) {
 		file_put_contents( 'ips.txt', json_encode( $ips) );
-		echoo( $ips );
+		echoo( "<a href='?'>Refresh page to see table of controllable devices</a>");
 	}
 	echoo( "done.");
 	die();
